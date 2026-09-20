@@ -254,16 +254,16 @@ def status():
     typer.echo(f"\n{'Sensor':<30} {'Status':<12} {'Type':<15}")
     typer.echo("-" * 57)
 
-    # Feedforward guides
-    skills_dir = Path.cwd() / "gingx-sdd" / "skills" / "team"
-    skills = list(skills_dir.glob("*.md")) if skills_dir.exists() else []
+    # Feedforward guides — project-installed skills (openspec's .claude/skills/<name>/SKILL.md)
+    skills_dir = Path.cwd() / ".claude" / "skills"
+    skills = list(skills_dir.glob("*/SKILL.md")) if skills_dir.exists() else []
     typer.echo(f"{'Feedforward guides (skills)':<30} {f'{len(skills)} loaded':<12} {'guide':<15}")
     if skills:
         for s in sorted(skills):
-            typer.echo(f"  └─ /{s.stem:<25}")
+            typer.echo(f"  └─ /{s.parent.name:<25}")
 
-    # Agents
-    agents_dir = Path.cwd() / ".claude" / "skills"
+    # Agents — personas written by `gingx-sdd init` (.claude/agents/*.md)
+    agents_dir = Path.cwd() / ".claude" / "agents"
     agents = list(agents_dir.glob("*.md")) if agents_dir.exists() else []
     typer.echo(f"{'Agent personas':<30} {f'{len(agents)} registered':<12} {'guide':<15}")
 
@@ -1635,7 +1635,7 @@ def team_spawn(
 
     project_root = _find_project_root()
     profiles_dir = project_root / ".gingx" / "profiles"
-    personas_dir = project_root / "gingx-sdd" / "skills" / "team"
+    personas_dir = project_root / ".claude" / "agents"
     extras_dir = project_root / "gingx-sdd" / "extras" / "skills"
 
     # Load registry
@@ -1687,7 +1687,7 @@ def team_list(
     from .profile import load_profile, list_profiles
 
     project_root = _find_project_root()
-    personas_dir = project_root / "gingx-sdd" / "skills" / "team"
+    personas_dir = project_root / ".claude" / "agents"
     extras_dir = project_root / "gingx-sdd" / "extras" / "skills"
 
     registry = SkillRegistry()
