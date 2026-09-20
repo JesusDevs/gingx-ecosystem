@@ -1,3 +1,3 @@
-"""Gingx-SDD — Spec-Driven Development Framework with LangGraph Harness."""
+"""Gingx-SDD — Spec-Driven Development Framework."""
 
-__version__ = "0.1.0"
+__version__ = "0.3.1"

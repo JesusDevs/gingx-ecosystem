@@ -1,5 +1,7 @@
 # Gingx Ecosystem v0.3.1
 
+🇬🇧 **English** · [🇪🇸 Español](README.es.md)
+
 **Harness-driven AI development.** Spec → Plan → Code → Test → Security → Memory. Every phase is a contract. No code without an approved spec. Persistent vector memory that travels with the repo.
 
 ## In 30 Seconds
@@ -109,18 +111,47 @@ What it does:
 git clone https://github.com/JesusDevs/gingx-ecosystem.git
 cd gingx-ecosystem
 
-# Install mnemo (Go)
+# Install mnemo (Go) — no prebuilt binaries are published yet, build from source
 cd gingx-mnemo && go build -o mnemo . && cp mnemo /usr/local/bin/
 
-# Install gingx-sdd (Python)
+# Install OpenSpec (public npm package, not part of this repo)
+npm install -g @fission-ai/openspec
+
+# Install gingx-sdd (Python) — editable install, source stays at this path
 cd ../gingx-sdd && pip install -e .
 
 # Install graphify
 uv tool install graphifyy && graphify claude install
 
+# Ollama + embedding model (mnemo needs this for local, zero-cost embeddings)
+brew install ollama && ollama pull bge-m3   # or your OS's Ollama install method
+
 # Bootstrap a project
 cd ~/my-project && gingx-sdd init
+openspec init --tools claude   # gingx-sdd init doesn't call this yet — run it once per project
 ```
+
+> **Pinning a version**: `git clone` gets you `main` (latest, possibly ahead of the last tagged
+> release). To install a specific released version instead: `git checkout v0.3.1` before running
+> the steps above, or `git clone --branch v0.3.1 --depth 1 ...`. See [Versioning](#versioning).
+
+## Versioning
+
+The ecosystem follows [semantic versioning](https://semver.org/) (`vMAJOR.MINOR.PATCH`), tracked
+as git tags on this repo (`v0.2.0`, `v0.3.0`, `v0.3.1`, ...). [CHANGELOG.md](CHANGELOG.md) is the
+source of truth for what shipped in each release.
+
+```bash
+gingx-sdd release v0.4.0 --all         # tag + mnemo snapshot + changelog entry, every project
+gingx-sdd release v0.4.0 --all --dry-run   # preview without creating tags
+git tag -l                             # see all released versions
+```
+
+`gingx-sdd release` does **not** currently bump `gingx-sdd/pyproject.toml` or
+`gingx-sdd/gingx_sdd/__init__.py` — bump those by hand in the same commit as the release so
+`pip show gingx-sdd` reports the version that's actually installed. Each component in the monorepo
+versions independently (mnemo, gingx-sdd, graphify each have their own pace); the top-level repo
+tag/README version reflects the ecosystem as a whole.
 
 ## Using the Ecosystem in Another Project
 
